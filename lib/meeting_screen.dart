@@ -29,8 +29,8 @@ class _MeetingScreenState extends State<MeetingScreen> with WidgetsBindingObserv
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    
-    // create room
+
+    // Create room
     _room = VideoSDK.createRoom(
       roomId: widget.meetingId,
       token: widget.token,
@@ -48,11 +48,11 @@ class _MeetingScreenState extends State<MeetingScreen> with WidgetsBindingObserv
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  // listening to meeting events
+  // Listening to meeting events
   void setMeetingEventListener() {
     _room.on(Events.roomJoined, () {
       setState(() {
@@ -86,7 +86,7 @@ class _MeetingScreenState extends State<MeetingScreen> with WidgetsBindingObserv
     });
   }
 
-  // on back button pressed leave the room
+  // On back button pressed leave the room
   Future<bool> _onWillPop() async {
     _room.leave();
     return true;
@@ -102,14 +102,13 @@ class _MeetingScreenState extends State<MeetingScreen> with WidgetsBindingObserv
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(widget.meetingId),
-            // render all participant
+            SelectableText(widget.meetingId),
+            // Render all participants
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GridView.builder(
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
@@ -127,16 +126,22 @@ class _MeetingScreenState extends State<MeetingScreen> with WidgetsBindingObserv
             ),
             MeetingControls(
               onToggleMicButtonPressed: () {
-                micEnabled ? _room.muteMic() : _room.unmuteMic();
-                micEnabled = !micEnabled;
+                setState(() {
+                  micEnabled ? _room.muteMic() : _room.unmuteMic();
+                  micEnabled = !micEnabled;
+                });
               },
               onToggleCameraButtonPressed: () {
-                camEnabled ? _room.disableCam() : _room.enableCam();
-                camEnabled = !camEnabled;
+                setState(() {
+                  camEnabled ? _room.disableCam() : _room.enableCam();
+                  camEnabled = !camEnabled;
+                });
               },
               onLeaveButtonPressed: () {
                 _room.leave();
               },
+              micEnabled: micEnabled,
+              camEnabled: camEnabled,
             ),
           ],
         ),
