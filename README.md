@@ -1,4 +1,7 @@
 # video_streaming
+a video conferencing app for 2 or more people with the help of video sdk.
+
+
 
 A new Flutter project.
 
